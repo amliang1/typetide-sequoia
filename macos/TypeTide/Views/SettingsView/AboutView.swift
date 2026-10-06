@@ -66,6 +66,8 @@ struct AboutView: View {
             }
             .padding(.horizontal, 40)
 
+            Link("Discord", destination: URL(string: "https://discord.gg/eGzEaP6TzR")!)
+
             // 检查更新按钮
             VStack(spacing: 12) {
                 Button(action: {
