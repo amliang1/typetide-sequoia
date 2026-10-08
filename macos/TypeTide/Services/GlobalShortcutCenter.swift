@@ -100,6 +100,7 @@ struct ShortcutEventDebouncer {
     }
 }
 
+@MainActor
 final class GlobalShortcutCenter {
     static let shared = GlobalShortcutCenter()
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.xnu.typetide",
@@ -183,7 +184,7 @@ final class GlobalShortcutCenter {
     }
 
     deinit {
-        unregisterAll()
+        for ref in hotKeyRefs.values { UnregisterEventHotKey(ref) }
         if let eventHandler { RemoveEventHandler(eventHandler) }
     }
 }

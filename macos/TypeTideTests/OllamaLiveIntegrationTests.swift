@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import TypeTide
 
+@MainActor
 final class OllamaLiveIntegrationTests: XCTestCase {
     private struct TagsResponse: Decodable {
         struct Model: Decodable {

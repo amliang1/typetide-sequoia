@@ -1,6 +1,7 @@
 import XCTest
 @testable import TypeTide
 
+@MainActor
 final class BuiltInTranslationTests: XCTestCase {
     func testDedicatedTranslationTemplateAndLanguageDirection() throws {
         let prompt = try LocalTranslationPrompt.make(.init(text: "你好", source: .chinese, target: .english))

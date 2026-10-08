@@ -1,6 +1,7 @@
 import XCTest
 @testable import TypeTide
 
+@MainActor
 final class OpenAIProviderTests: XCTestCase {
     func testMissingAPIKeyFailsBeforeNetworkRequest() async {
         let provider = OpenAIProvider(baseURL: "https://example.com/v1", apiKey: "", model: "test")

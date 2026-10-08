@@ -72,7 +72,6 @@ final class BuiltInModelManager: ObservableObject {
     func cancel() { downloadTask?.cancel() }
 
     /// All network access is confined to explicit model installation, never inference.
-    @concurrent
     nonisolated static func install(
         at destination: URL = BuiltInModel.directory,
         progress: @escaping @Sendable (Double, String) -> Void

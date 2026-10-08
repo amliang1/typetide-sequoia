@@ -8,6 +8,7 @@
 import ApplicationServices
 import AppKit
 
+@MainActor
 enum AccessibilityPermission {
     static var isGranted: Bool { AXIsProcessTrusted() }
 

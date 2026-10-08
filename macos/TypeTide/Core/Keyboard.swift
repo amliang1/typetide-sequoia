@@ -7,6 +7,7 @@
 
 import CoreGraphics
 
+@MainActor
 enum Keyboard {
     static let aKey: CGKeyCode = 0
     static let cKey: CGKeyCode = 8

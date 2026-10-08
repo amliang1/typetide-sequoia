@@ -1,6 +1,7 @@
 import XCTest
 @testable import TypeTide
 
+@MainActor
 final class TranslationPromptTests: XCTestCase {
     func testSystemPromptContainsDirectionAndNoExtraOutputRule() {
         let prompt = TranslationPrompt.system(target: .english, source: .chinese)

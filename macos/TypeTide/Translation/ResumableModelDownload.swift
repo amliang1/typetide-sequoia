@@ -2,7 +2,7 @@ import Foundation
 
 /// A bounded range downloader. Completed parts survive cancellation and relaunch;
 /// only two 16 MiB ranges are in flight, and the final pinned hash is still required.
-nonisolated enum ResumableModelDownload {
+enum ResumableModelDownload {
     static let partSize: Int64 = 16 * 1024 * 1024
     struct Part: Sendable {
         let index: Int
@@ -46,7 +46,6 @@ nonisolated enum ResumableModelDownload {
 
     typealias Transport = @Sendable (URLRequest, Int64, @escaping @Sendable (Int64) -> Void) async throws -> (URL, URLResponse)
 
-    @concurrent
     static func fetch(file: BuiltInModel.File, target: URL,
                       session: URLSession, transport: Transport? = nil, progress: @escaping @Sendable (Int64, String) -> Void) async throws {
         let fm = FileManager.default
@@ -145,7 +144,7 @@ nonisolated enum ResumableModelDownload {
 
 /// URLSession delegates can run on different queues. Serialize accounting and
 /// callbacks so the UI never receives an older snapshot after a newer one.
-nonisolated private final class RangeProgress: @unchecked Sendable {
+private final class RangeProgress: @unchecked Sendable {
     private let lock = NSLock()
     private var bytes = [Int: Int64]()
     private var lastEmission = Date.distantPast
@@ -165,7 +164,7 @@ nonisolated private final class RangeProgress: @unchecked Sendable {
         }
     }
 }
-nonisolated private final class RangeDownloadProgress: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {
+private final class RangeDownloadProgress: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {
     private let limit: Int64
     private let update: @Sendable (Int64) -> Void
     init(limit: Int64, update: @escaping @Sendable (Int64) -> Void) { self.limit = limit; self.update = update }

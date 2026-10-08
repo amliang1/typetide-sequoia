@@ -7,6 +7,7 @@
 
 import AppKit
 
+@MainActor
 enum TextReplacer {
 #if DEBUG
     /// XCTest seam for exercising the complete popup replacement flow without

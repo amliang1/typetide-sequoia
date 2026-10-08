@@ -23,6 +23,7 @@ enum CaptureMethod: String {
     case clipboardFallback
 }
 
+@MainActor
 enum SelectionCapture {
 
     // MARK: 读模式：拿到选中的文字

@@ -1,6 +1,7 @@
 import XCTest
 @testable import TypeTide
 
+@MainActor
 final class LanguageAndCacheTests: XCTestCase {
     @MainActor
     func testTideStateTracksStreamingLifecycle() {

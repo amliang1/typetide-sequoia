@@ -1,10 +1,12 @@
+本地移植版本支持 macOS 15（Sequoia）。构建、签名和验证说明见 [Sequoia 构建说明](SEQUOIA.md)。
+
 <h1 align="center">TypeTide</h1>
 <p align="center"><b>用你的语言输入，在 macOS 和 Windows 的任何应用里原地改写。</b></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/macOS-26+-black.svg" />
+  <img src="https://img.shields.io/badge/macOS-15+-black.svg" />
   <img src="https://img.shields.io/badge/Windows-10+-0078d4.svg" />
-  <img src="https://img.shields.io/badge/Swift-5.9+-orange.svg" />
+  <img src="https://img.shields.io/badge/Swift-6.1+-orange.svg" />
   <img src="https://img.shields.io/badge/C++-20-00599c.svg" />
   <img src="https://img.shields.io/badge/AI-Ollama%20%7C%20OpenAI--compatible-7c5cff.svg" />
   <img src="https://img.shields.io/badge/License-MIT-green.svg" />
@@ -172,7 +174,7 @@ open TypeTide.xcodeproj          # ⌘R 运行
 ./scripts/build-release.sh      # → build/TypeTide-x.y.z.dmg
 ```
 
-要求：macOS 26+、Xcode 15+。应用**未**沙盒化（需要辅助功能权限 + 合成键盘事件）。本地开发构建请用你的 Apple Development 团队签名，这样辅助功能授权在重新构建后依然有效。
+要求：macOS 15（Sequoia）+、Xcode 16.4+、Swift 6.1+ 和内置 Metal 编译器。本移植版本固定使用 MLX Swift LM 2.29.3。应用**未**沙盒化（需要辅助功能权限 + 合成键盘事件）。本地开发构建请用你的 Apple Development 团队签名，这样辅助功能授权在重新构建后依然有效。
 
 Windows：
 ```powershell
@@ -200,7 +202,7 @@ cmake --build build             # → build/TypeTide.exe
 - **没有译文** → Ollama：`ollama serve` 在运行吗？模型装了吗？（配置的模型没装时 TypeTide 会自动换成已装的。）OpenAI：检查 base URL / key / 模型名。
 - **qwen3 之类的模型翻译特别慢** → TypeTide 已为 Ollama 模型自动关闭隐藏「思考」；如果还是慢，可能是模型对你的硬件太大了——在**设置 → Backend** 的下拉框里换个小的。
 - **某些应用里弹窗位置不准** → 这些应用不暴露文字边界；弹窗会退回到光标位置。
-- **Sequoia 或更早的 macOS 提示无法打开** → TypeTide 要求 **macOS 26+**。它基于当前的 SwiftUI 菜单栏和设置 API 构建，保持单一现代基线是小项目可靠性的前提。暂无支持旧版 macOS 的计划。
+- **macOS 兼容性** → 本移植版本支持 **macOS 15（Sequoia）+**。上游 macOS 26 版本属于不同构建；macOS 15 请使用 Sequoia 构建。
 - **哪个语言填哪里？** → 在**设置 → Language** 里选你的**母语**和**外语**（没有容易搞反的“源/目标”概念）。每个快捷键有自己的方向；**自动**会检测选中文字的语言并翻译成另一种。
 
 ## 🤝 参与贡献

@@ -21,7 +21,6 @@ struct LocalTranslationProvider: TranslationProvider {
 
 /// Mirrors the upstream TranslateGemma text template; raw tokenization avoids a
 /// generic chat processor changing its structured source/target language fields.
-@MainActor
 enum LocalTranslationPrompt {
     static func make(_ request: TranslationRequest) throws -> String {
         guard request.style == .faithful else {
@@ -56,7 +55,7 @@ actor LocalTranslationEngine {
         guard BuiltInModel.supported else {
             throw TranslationError.notConfigured("Built-in translation requires an Apple Silicon Mac. Choose Ollama or an API backend on this Mac.")
         }
-        let prompt = try await LocalTranslationPrompt.make(request)
+        let prompt = try LocalTranslationPrompt.make(request)
         guard BuiltInModel.isInstalled(at: directory) else {
             throw TranslationError.notConfigured("Download the built-in model in Settings → Backend (2.22 GB). After download, translations work offline without Ollama.")
         }
@@ -89,32 +88,28 @@ actor LocalTranslationEngine {
             }
             let iterator = try TokenIterator(input: LMInput(tokens: MLXArray(tokens)), model: context.model,
                                              parameters: .init(maxTokens: 2048, temperature: 0))
-            let (stream, generationTask) = MLXLMCommon.generateTask(
-                promptTokenCount: tokens.count, modelConfiguration: context.configuration,
-                tokenizer: context.tokenizer, iterator: iterator)
-            try await withTaskCancellationHandler {
-                var reachedLimit = false
-                for await event in stream {
-                    if Task.isCancelled { break }
-                    switch event {
-                    case .chunk(let text): continuation.yield(text)
-                    case .info(let info): reachedLimit = info.stopReason == .length
-                    default: break
-                    }
-                }
-                if Task.isCancelled { generationTask.cancel() }
-                await generationTask.value
-                try Task.checkCancellation()
-                if reachedLimit {
-                    throw TranslationError.notConfigured("Translation exceeded the built-in model's output limit. Select a shorter passage; the partial translation has not been applied.")
-                }
-            } onCancel: { generationTask.cancel() }
+            // The synchronous visitor runs on the model container's actor, not
+            // the main thread. It drains Metal work before releasing the container.
+            // Check cancellation per token and preserve streaming output on MLX 2.29.
+            var detokenizer = NaiveStreamingDetokenizer(tokenizer: context.tokenizer)
+            let info: GenerateCompletionInfo = MLXLMCommon.generate(
+                input: LMInput(tokens: MLXArray(tokens)), context: context, iterator: iterator
+            ) { (token: Int) in
+                guard !Task.isCancelled else { return .stop }
+                detokenizer.append(token: token)
+                if let chunk = detokenizer.next() { continuation.yield(chunk) }
+                return .more
+            }
+            try Task.checkCancellation()
+            if info.generationTokenCount >= 2048 {
+                throw TranslationError.notConfigured("Translation exceeded the built-in model's output limit. Select a shorter passage; the partial translation has not been applied.")
+            }
         }
     }
 
     private func unload() {
         guard !busy else { return }
         container = nil
-        Memory.clearCache()
+        GPU.clearCache()
     }
 }

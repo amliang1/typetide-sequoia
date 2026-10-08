@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import TypeTide
 
+@MainActor
 final class DiagnosticsPrivacyTests: XCTestCase {
     func testDiagnosticSchemaContainsOperationalMetadataOnly() throws {
         let event = DiagnosticEvent(

@@ -7,6 +7,7 @@
 
 import AppKit
 
+@MainActor
 enum PasteboardHelper {
     /// 深拷贝当前剪贴板所有 item。
     static func snapshot(from pb: NSPasteboard = .general) -> [NSPasteboardItem] {

@@ -53,6 +53,7 @@ enum SettingsOpener {
     }
 }
 
+@MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var statusItem: NSStatusItem?
     private let statusMenu = NSMenu()

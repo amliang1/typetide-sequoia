@@ -1,6 +1,7 @@
 import XCTest
 @testable import TypeTide
 
+@MainActor
 final class OptionalShortcutTests: XCTestCase {
     private let read = KeyboardShortcutPreference(keyCode: 2, modifiers: [.option])
     private let rewrite = KeyboardShortcutPreference(keyCode: 15, modifiers: [.option])

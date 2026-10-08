@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import TypeTide
 
+@MainActor
 final class SharedContractTests: XCTestCase {
     private struct Contracts: Decodable {
         struct Detection: Decodable { let text: String; let expected: String }

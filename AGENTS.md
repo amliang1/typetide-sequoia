@@ -100,7 +100,7 @@ Both need `gh auth login` once. `UpdateChecker` (both apps) reads
 
 Keep `README.md` free of the app's release version — link to `../../releases`,
 refer to artifacts as `TypeTide-Setup-x.y.z.exe` / `build/TypeTide.dmg` style,
-never a pinned literal version. Platform/dependency versions (macOS 26+,
+never a pinned literal version. Platform/dependency versions (macOS 15+,
 Windows 10+, Swift 5.9+, C++20) are fine.
 
 ## Current Product Priorities

@@ -2,7 +2,7 @@ import Foundation
 import CryptoKit
 
 /// Pinned text-only TranslateGemma weights. Never download user-supplied code.
-nonisolated enum BuiltInModel {
+enum BuiltInModel {
     static let repository = "mlx-community/translategemma-4b-it-4bit"
     static let revision = "5788ec08c047f3f2e17808101b8d9566ac930d58"
     static let name = "TranslateGemma 4B · 4-bit"

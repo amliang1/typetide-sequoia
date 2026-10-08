@@ -33,6 +33,7 @@ struct GitHubRelease: Codable {
 }
 
 /// 版本检测服务
+@MainActor
 class UpdateChecker: ObservableObject {
     static let shared = UpdateChecker()
 
@@ -74,6 +75,12 @@ class UpdateChecker: ObservableObject {
     /// - Parameter silent: 是否静默检查（不显示"已是最新版本"提示）
     func checkForUpdates(silent: Bool = false) {
         guard !isChecking else { return }
+        // Upstream releases target macOS 26. Do not offer an incompatible
+        // replacement for this locally rebuilt Sequoia port.
+        guard ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 else {
+            errorMessage = "This Sequoia build updates by rebuilding from source. Upstream downloads require macOS 26."
+            return
+        }
 
         Task { @MainActor in
             isChecking = true
@@ -124,6 +131,7 @@ class UpdateChecker: ObservableObject {
 
     /// 检查是否应该自动检查更新（每天检查一次）
     func shouldAutoCheck() -> Bool {
+        guard ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 else { return false }
         guard let lastCheck = UserDefaults.standard.object(forKey: lastCheckKey) as? Date else {
             return true // 从未检查过
         }

@@ -1,10 +1,12 @@
+This local port supports macOS 15 (Sequoia). See [Sequoia build notes](SEQUOIA.md) for rebuilding, signing, and validation.
+
 <h1 align="center">TypeTide</h1>
 <p align="center"><b>Type in your language. Rewrite in place — in any app on macOS &amp; Windows.</b></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/macOS-26+-black.svg" />
+  <img src="https://img.shields.io/badge/macOS-15+-black.svg" />
   <img src="https://img.shields.io/badge/Windows-10+-0078d4.svg" />
-  <img src="https://img.shields.io/badge/Swift-6.2+-orange.svg" />
+  <img src="https://img.shields.io/badge/Swift-6.1+-orange.svg" />
   <img src="https://img.shields.io/badge/C++-20-00599c.svg" />
   <img src="https://img.shields.io/badge/AI-Ollama%20%7C%20OpenAI--compatible-7c5cff.svg" />
   <img src="https://img.shields.io/badge/License-MIT-green.svg" />
@@ -179,7 +181,7 @@ open TypeTide.xcodeproj          # ⌘R to run
 ./scripts/build-release.sh      # → build/TypeTide-x.y.z.dmg
 ```
 
-Requirements: macOS 26+, Xcode 26+ with Swift 6.2+ and the Metal Toolchain (`xcodebuild -downloadComponent MetalToolchain`). Built-in MLX translation requires Apple Silicon. The app is **not** sandboxed (it needs Accessibility + synthetic key events). For local dev builds, sign with your Apple Development team so the Accessibility grant persists across rebuilds.
+Requirements: macOS 15 (Sequoia)+, Xcode 16.4+ with Swift 6.1+ and its bundled Metal compiler. This port pins MLX Swift LM 2.29.3 for toolchain compatibility. Built-in MLX translation requires Apple Silicon. The app is **not** sandboxed (it needs Accessibility + synthetic key events). For local dev builds, sign with your Apple Development team so the Accessibility grant persists across rebuilds.
 
 Windows:
 ```powershell
@@ -207,7 +209,7 @@ Whichever platform releases first creates the `vX.Y.Z` tag; the other uploads it
 - **No translation** → Ollama: is `ollama serve` running and the model installed? (TypeTide auto-picks an installed model if your configured one is missing.) OpenAI: check base URL / key / model.
 - **Translation is very slow on a qwen3-class model** → TypeTide disables hidden “thinking”, preloads the selected model, and keeps it warm for 10 minutes. If it still crawls, the model may be too big for your hardware — try a smaller one from **Settings → Backend**.
 - **Misaligned popup in some apps** → those apps don’t expose text bounds; the popup falls back to the cursor position.
-- **“Can’t be opened on this Mac” on Sequoia or earlier** → TypeTide requires **macOS 26+**. It’s built against the current SwiftUI menu-bar and Settings APIs, and keeping a single modern baseline is what lets a small project stay reliable. Support for older macOS isn’t planned right now.
+- **macOS compatibility** → This port supports **macOS 15 (Sequoia)+**. Upstream macOS 26 releases are separate builds; use the Sequoia artifact when running macOS 15.
 - **Which language goes where?** → In **Settings → Language**, pick your **native** and **foreign** language (there is no “source/target” pair to get backwards). Each shortcut has its own direction; **auto** detects the selected text and translates the other way.
 
 ## 🤝 Contributing

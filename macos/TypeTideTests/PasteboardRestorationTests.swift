@@ -2,6 +2,7 @@ import AppKit
 import XCTest
 @testable import TypeTide
 
+@MainActor
 final class PasteboardRestorationTests: XCTestCase {
     func testSnapshotRestoresAllItemsAndRepresentations() throws {
         let pasteboard = NSPasteboard(name: .init("TypeTideTests.\(UUID().uuidString)"))

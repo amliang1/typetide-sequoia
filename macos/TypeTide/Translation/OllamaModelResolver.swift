@@ -8,6 +8,7 @@
 import Foundation
 import Ollama
 
+@MainActor
 enum OllamaModelResolver {
     struct ModelRecommendation: Equatable {
         let model: String

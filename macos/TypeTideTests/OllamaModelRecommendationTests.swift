@@ -1,6 +1,7 @@
 import XCTest
 @testable import TypeTide
 
+@MainActor
 final class OllamaModelRecommendationTests: XCTestCase {
     func testRecommendationUsesMemoryBudgetAndLargestFittingModel() {
         let models = ["qwen:1.5b", "qwen:3b", "qwen:7b", "qwen:14b", "qwen:32b"]

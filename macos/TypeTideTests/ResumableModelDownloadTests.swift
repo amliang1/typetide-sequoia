@@ -2,6 +2,7 @@ import XCTest
 import CryptoKit
 @testable import TypeTide
 
+@MainActor
 final class ResumableModelDownloadTests: XCTestCase {
     func testLiveRangeDownload() async throws {
         guard ProcessInfo.processInfo.environment["TYPETIDE_TEST_RANGE_DOWNLOAD"] == "1" else {
